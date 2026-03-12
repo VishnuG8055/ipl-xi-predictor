@@ -2,7 +2,7 @@
 
 Build your dream IPL XI, predict match winners, and compete with cricket fans worldwide. **100% free to use!**
 
-[![Next.js](https://img.shields.io/badge/Next.js-14-black?logo=next.js)](https://nextjs.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-15-black?logo=next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3-38bdf8?logo=tailwindcss)](https://tailwindcss.com/)
 [![Supabase](https://img.shields.io/badge/Supabase-green?logo=supabase)](https://supabase.com/)
@@ -26,7 +26,7 @@ Build your dream IPL XI, predict match winners, and compete with cricket fans wo
 
 | Layer | Tool | Purpose |
 |-------|------|---------|
-| **Frontend** | Next.js 14 (App Router) | React framework |
+| **Frontend** | Next.js 15 (App Router) | React framework |
 | **Styling** | Tailwind CSS | Utility-first CSS |
 | **Animations** | Framer Motion | Smooth animations |
 | **Auth** | Supabase + Google OAuth | Login system |
@@ -129,7 +129,7 @@ ipl-xi-predictor/
 ## 🗺️ Roadmap
 
 ### ✅ Phase 1 (Current) — Foundation
-- [x] Next.js 14 project setup
+- [x] Next.js 15 project setup
 - [x] Neon Cricket dark theme
 - [x] Google Auth integration
 - [x] Landing page with team cards
