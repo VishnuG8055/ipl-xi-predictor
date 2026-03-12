@@ -3,6 +3,42 @@
 -- Enable UUID extension
 create extension if not exists "uuid-ossp";
 
+-- Teams table (stores all 10 IPL teams)
+create table if not exists public.teams (
+  id text primary key,                  -- e.g. 'csk', 'mi'
+  name text not null,                   -- Full name
+  short_name text not null,             -- e.g. 'CSK'
+  city text not null,
+  primary_color text not null,          -- Hex color
+  secondary_color text not null,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+-- Players table (squad members for each team)
+create table if not exists public.players (
+  id uuid default uuid_generate_v4() primary key,
+  team_id text references public.teams(id) on delete cascade not null,
+  name text not null,
+  role text not null check (role in ('batsman', 'bowler', 'all-rounder', 'wicket-keeper')),
+  is_overseas boolean default false not null,
+  country text default 'India' not null,
+  jersey_number integer,
+  batting_style text,
+  bowling_style text,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+-- Badges table
+create table if not exists public.badges (
+  id text primary key,
+  name text not null,
+  description text not null,
+  icon text not null,           -- emoji icon
+  condition_type text not null, -- e.g. 'prediction_count', 'accuracy'
+  condition_value integer not null,
+  points integer default 0 not null
+);
+
 -- Profiles table
 create table if not exists public.profiles (
   id uuid references auth.users on delete cascade not null primary key,
@@ -14,6 +50,15 @@ create table if not exists public.profiles (
   prediction_accuracy numeric(5,2),
   created_at timestamp with time zone default timezone('utc'::text, now()) not null,
   updated_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+-- User badges (which badges a user has earned — placed after profiles so FK works)
+create table if not exists public.user_badges (
+  id uuid default uuid_generate_v4() primary key,
+  user_id uuid references public.profiles(id) on delete cascade not null,
+  badge_id text references public.badges(id) on delete cascade not null,
+  earned_at timestamp with time zone default timezone('utc'::text, now()) not null,
+  unique(user_id, badge_id)
 );
 
 -- Matches table
@@ -102,4 +147,25 @@ create policy "Poll votes are viewable by everyone" on public.poll_votes
   for select using (true);
 
 create policy "Users can insert their own votes" on public.poll_votes
+  for insert with check (auth.uid() = user_id);
+
+-- Teams & Players policies
+alter table public.teams enable row level security;
+alter table public.players enable row level security;
+alter table public.badges enable row level security;
+alter table public.user_badges enable row level security;
+
+create policy "Teams are viewable by everyone" on public.teams
+  for select using (true);
+
+create policy "Players are viewable by everyone" on public.players
+  for select using (true);
+
+create policy "Badges are viewable by everyone" on public.badges
+  for select using (true);
+
+create policy "User badges are viewable by everyone" on public.user_badges
+  for select using (true);
+
+create policy "Users can insert their own badges" on public.user_badges
   for insert with check (auth.uid() = user_id);

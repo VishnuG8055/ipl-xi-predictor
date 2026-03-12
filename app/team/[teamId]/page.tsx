@@ -4,8 +4,9 @@ import EmptyState from '@/components/shared/EmptyState';
 import PageTransition from '@/components/shared/PageTransition';
 import { IPL_TEAMS } from '@/lib/utils/constants';
 
-export default function TeamPage({ params }: { params: { teamId: string } }) {
-  const team = IPL_TEAMS.find(t => t.id === params.teamId);
+export default async function TeamPage({ params }: { params: Promise<{ teamId: string }> }) {
+  const { teamId } = await params;
+  const team = IPL_TEAMS.find(t => t.id === teamId);
 
   return (
     <PageTransition>

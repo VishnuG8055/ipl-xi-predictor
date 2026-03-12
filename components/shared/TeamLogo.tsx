@@ -23,7 +23,7 @@ export default function TeamLogo({ shortName, primaryColor, size = 'md', classNa
         color: primaryColor,
       }}
     >
-      {shortName.slice(0, 2)}
+      {shortName}
     </div>
   );
 }
